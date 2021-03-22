@@ -7,44 +7,43 @@
 #include "stdbool.h"
 
 typedef int ElementType;
-typedef struct QNode *PtrToNode;
-typedef struct QNode {
-    struct TNode *data;
-    PtrToNode next;
+struct QNode {
+    ElementType item;
+    struct QNode *next;
 };
+typedef struct QNode *Position;
 
-PtrToNode Q = NULL;
-
-PtrToNode create() {
-    Q = (PtrToNode) malloc(sizeof(struct QNode));
-    Q->data = -1;
-    Q->next = NULL;
-    return Q;
+Position Create() {
+    Position q;
+    q = (Position) malloc(sizeof(struct QNode));
+    q->item = 0;
+    q->next = NULL;
+    return q;
 }
 
-bool add(ElementType val) {
-    if (!Q)return false;
-    PtrToNode tmp = Q;
+bool Add(Position q, ElementType val) {
+    if (!q) q = Create();
+    Position tmp = q;
     while (tmp->next)
         tmp = tmp->next;
-    tmp->next = (PtrToNode) malloc(sizeof(struct QNode));
-    tmp->next->next = NULL;
-    tmp->next->data = val;
+    Position node = (Position) malloc(sizeof(struct QNode));
+    node->item = val;
+    node->next = NULL;
+    tmp->next = node;
     return true;
 }
 
-bool isEmpty() {
-    if (Q->next)return true;
-    return false;
+bool IsEmpty(Position q) {
+    return q->next == NULL;
 }
 
-ElementType pop() {
-    ElementType tmp = Q->next->data;
-    Q->next = Q->next->next;
-    free(tmp);
+int Pop(Position q) {
+    Position p = q->next;
+    ElementType tmp = p->item;
+    q->next = p->next;
+    free(p);
     return tmp;
 }
-
-int main() {
-    return 0;
-}
+//int main() {
+//    return 0;
+//}
